@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { useNavigate } from 'react-router-dom';
 import { LogIn, GraduationCap, Eye, EyeOff } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -106,7 +106,12 @@ const Login = () => {
                         Connexion
                     </button>
 
-                    <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)' }}>
+                    <div style={{ marginTop: '1.5rem', textAlign: 'center', fontSize: '0.9rem' }}>
+                        <span style={{ color: 'var(--text-secondary)' }}>Vous n'avez pas de compte ? </span>
+                        <Link to="/register" style={{ color: 'var(--accent)', fontWeight: 600, textDecoration: 'none' }}>Inscrivez-vous</Link>
+                    </div>
+
+                    <div style={{ marginTop: '1rem', textAlign: 'center', fontSize: '0.8rem', color: 'var(--text-secondary)', opacity: 0.7 }}>
                         <p>Utilisez: <strong>user@example.com</strong> / <strong>password123</strong></p>
                     </div>
                 </form>
