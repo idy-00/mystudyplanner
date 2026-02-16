@@ -34,6 +34,15 @@
       "dueDate": "2026-02-28",
       "status": "todo",
       "id": 1771075985481
+    },
+    {
+      "title": "Examen madame cisse ",
+      "description": "Travail de groupe pour madame cisse ",
+      "subject": "TEC",
+      "priority": "medium",
+      "dueDate": "2026-02-19",
+      "status": "todo",
+      "id": 1771258491727
     }
   ],
   "subjects": [
@@ -41,6 +50,8 @@
     "Resseaux",
     "Web",
     "Base de données",
-    "Maths"
+    "Maths",
+    "Physique",
+    "TEC"
   ]
 }

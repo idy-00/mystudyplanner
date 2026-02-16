@@ -40,7 +40,7 @@ const Dashboard = () => {
                 highPriority: tasks.filter(t => t.priority === 'high' && t.status !== 'done').length,
                 overdue: tasks.filter(t => isOverdue(t.dueDate, t.status)).length
             });
-            setRecentTasks(tasks.slice(-5).reverse());
+            setRecentTasks(tasks.slice(-3).reverse());
         } catch (error) {
             console.error("Error fetching stats", error);
         }
