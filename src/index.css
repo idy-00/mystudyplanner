@@ -257,18 +257,18 @@ button {
 
 .success-badge {
   position: absolute;
-  top: -20px;
-  left: 0;
-  background-color: var(--success);
+  top: 0;
+  right: 0;
+  background-color: var(--accent);
   color: white;
-  padding: 6px 14px;
+  padding: 8px 16px;
   border-radius: 20px;
-  font-size: 0.85rem;
+  font-size: 0.9rem;
   font-weight: 600;
   display: flex;
   align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 12px rgba(46, 125, 50, 0.3);
+  gap: 10px;
+  box-shadow: 0 4px 15px rgba(2, 115, 104, 0.3);
   z-index: 100;
   animation: badgeFade 5s forwards;
 }
