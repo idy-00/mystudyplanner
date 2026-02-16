@@ -16,9 +16,9 @@ const Login = () => {
         setError('');
         const result = await login(email, password);
         if (result.success) {
-            navigate('/dashboard');
+            navigate('/dashboard', { state: { successMessage: 'Connexion réussie !' } });
         } else {
-            setError(result.message);
+            setError(result.message || 'Email ou mot de passe incorrect');
         }
     };
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { taskService, subjectService } from '../services/api';
-import { Plus, Search, Filter, Trash2, Edit2, CheckCircle2, Circle } from 'lucide-react';
+import { Plus, Search, Filter, Trash2, Edit2, CheckCircle2, Circle, Play, Pause } from 'lucide-react';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -42,14 +42,25 @@ const Tasks = () => {
         }
     };
 
-    const handleToggleStatus = async (task) => {
-        const newStatus = task.status === 'done' ? 'todo' : 'done';
+    const handleUpdateStatus = async (task, newStatus) => {
         try {
             await taskService.update(task.id, { status: newStatus });
             setTasks(tasks.map(t => t.id === task.id ? { ...t, status: newStatus } : t));
         } catch (error) {
             console.error("Error updating status", error);
         }
+    };
+
+    const handleToggleStatus = async (task) => {
+        let newStatus;
+        if (task.status === 'todo') {
+            newStatus = 'in_progress';
+        } else if (task.status === 'in_progress') {
+            newStatus = 'done';
+        } else {
+            newStatus = 'todo';
+        }
+        handleUpdateStatus(task, newStatus);
     };
 
     const handleDelete = async (id) => {
@@ -150,7 +161,8 @@ const Tasks = () => {
 
                     <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} style={{ width: 'auto', margin: 0 }}>
                         <option value="all">Tous les états</option>
-                        <option value="todo">À faire / En cours</option>
+                        <option value="todo">À faire</option>
+                        <option value="in_progress">En cours</option>
                         <option value="done">Terminé</option>
                     </select>
                 </div>
@@ -201,21 +213,38 @@ const Tasks = () => {
                                         </span>
                                     )}
                                 </span>
-                                <button
-                                    onClick={() => handleToggleStatus(task)}
-                                    style={{
-                                        backgroundColor: 'transparent',
-                                        color: task.status === 'done' ? 'var(--accent)' : 'var(--text-secondary)',
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        gap: '0.4rem',
-                                        fontSize: '0.9rem',
-                                        fontWeight: 600
-                                    }}
-                                >
-                                    {task.status === 'done' ? <CheckCircle2 size={20} /> : <Circle size={20} />}
-                                    {task.status === 'done' ? 'Terminé' : 'Marquer prêt'}
-                                </button>
+                                {task.status === 'todo' ? (
+                                    <button
+                                        onClick={() => handleUpdateStatus(task, 'in_progress')}
+                                        style={{
+                                            backgroundColor: 'transparent',
+                                            color: 'var(--text-secondary)',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.4rem',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        <Play size={20} /> Commencer
+                                    </button>
+                                ) : (
+                                    <button
+                                        onClick={() => handleToggleStatus(task)}
+                                        style={{
+                                            backgroundColor: 'transparent',
+                                            color: task.status === 'done' ? 'var(--accent)' : '#f57c00',
+                                            display: 'flex',
+                                            alignItems: 'center',
+                                            gap: '0.4rem',
+                                            fontSize: '0.9rem',
+                                            fontWeight: 600
+                                        }}
+                                    >
+                                        {task.status === 'done' ? <CheckCircle2 size={20} /> : <Pause size={20} />}
+                                        {task.status === 'done' ? 'Terminé' : 'En cours'}
+                                    </button>
+                                )}
                             </div>
                         </div>
                     ))}

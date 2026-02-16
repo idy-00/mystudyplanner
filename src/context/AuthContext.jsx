@@ -29,6 +29,14 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
+    const register = async (name, email, password) => {
+        // Simulated registration
+        const userData = { id: Date.now(), name, email };
+        setUser(userData);
+        localStorage.setItem('user', JSON.stringify(userData));
+        return { success: true };
+    };
+
     const logout = () => {
         setUser(null);
         localStorage.removeItem('user');

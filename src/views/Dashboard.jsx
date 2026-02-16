@@ -1,14 +1,24 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { taskService } from '../services/api';
-import { CheckCircle, Clock, ListTodo, AlertTriangle, CalendarX } from 'lucide-react';
+import { CheckCircle, Clock, ListTodo, AlertTriangle, CalendarX, Circle, Check } from 'lucide-react';
 
 const Dashboard = () => {
+    const location = useLocation();
     const [stats, setStats] = useState({ total: 0, pending: 0, completed: 0, highPriority: 0, overdue: 0 });
     const [recentTasks, setRecentTasks] = useState([]);
+    const [badge, setBadge] = useState(null);
 
     useEffect(() => {
         fetchData();
-    }, []);
+        if (location.state?.successMessage) {
+            setBadge(location.state.successMessage);
+            const timer = setTimeout(() => {
+                setBadge(null);
+            }, 5000);
+            return () => clearTimeout(timer);
+        }
+    }, [location.state]);
 
     const fetchData = async () => {
         try {
@@ -24,7 +34,8 @@ const Dashboard = () => {
 
             setStats({
                 total: tasks.length,
-                pending: tasks.filter(t => t.status !== 'done').length,
+                pending: tasks.filter(t => t.status === 'todo').length,
+                inProgress: tasks.filter(t => t.status === 'in_progress').length,
                 completed: tasks.filter(t => t.status === 'done').length,
                 highPriority: tasks.filter(t => t.priority === 'high' && t.status !== 'done').length,
                 overdue: tasks.filter(t => isOverdue(t.dueDate, t.status)).length
@@ -48,15 +59,22 @@ const Dashboard = () => {
     );
 
     return (
-        <div>
+        <div style={{ position: 'relative' }}>
+            {badge && (
+                <div className="success-badge">
+                    <Check size={16} />
+                    <span>{badge}</span>
+                </div>
+            )}
             <div style={{ marginBottom: '2rem' }}>
                 <h1 style={{ marginBottom: '0.5rem' }}>Tableau de bord</h1>
                 <p style={{ color: 'var(--text-secondary)' }}>Voici un aperçu global de vos devoirs et projets.</p>
             </div>
 
-            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', marginBottom: '3rem' }}>
+            <div className="grid" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', marginBottom: '3rem' }}>
                 <StatusCard title="Total Tâches" value={stats.total} icon={<ListTodo />} color="var(--bg-primary)" />
-                <StatusCard title="En cours" value={stats.pending} icon={<Clock />} color="#f57c00" />
+                <StatusCard title="À faire" value={stats.pending} icon={<Circle />} color="var(--text-secondary)" />
+                <StatusCard title="En cours" value={stats.inProgress || 0} icon={<Clock />} color="#f57c00" />
                 <StatusCard title="Terminées" value={stats.completed} icon={<CheckCircle />} color="var(--accent)" />
                 <StatusCard title="Priorité Haute" value={stats.highPriority} icon={<AlertTriangle />} color="var(--danger)" />
                 <StatusCard title="En retard" value={stats.overdue} icon={<CalendarX />} color="var(--danger)" />

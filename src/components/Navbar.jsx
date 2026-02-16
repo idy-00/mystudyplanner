@@ -13,9 +13,12 @@ const Navbar = () => {
         navigate('/login');
     };
 
-    const navItems = [
+    const navItems = user ? [
         { label: 'Tableau de bord', path: '/dashboard', icon: <LayoutDashboard size={20} /> },
         { label: 'Mes Tâches', path: '/tasks', icon: <CheckSquare size={20} /> },
+    ] : [
+        { label: 'Connexion', path: '/login', icon: <GraduationCap size={20} /> },
+        { label: 'Inscription', path: '/register', icon: <GraduationCap size={20} /> },
     ];
 
     return (
@@ -26,14 +29,17 @@ const Navbar = () => {
             display: 'flex',
             justifyContent: 'space-between',
             alignItems: 'center',
-            position: 'sticky',
+            position: 'fixed',
+            width: '100%',
             top: 0,
-            zIndex: 1000
+            left: 0,
+            zIndex: 1000,
+            height: '70px'
         }}>
-            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+            <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', textDecoration: 'none', color: 'white' }}>
                 <GraduationCap size={28} />
                 <h2 style={{ color: 'white', margin: 0 }}>MyStudyPlanner</h2>
-            </div>
+            </Link>
 
             <div style={{ display: 'flex', gap: '2rem', alignItems: 'center' }}>
                 {navItems.map(item => (
@@ -54,25 +60,27 @@ const Navbar = () => {
                     </Link>
                 ))}
 
-                <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '1rem', borderLeft: '1px solid #444', paddingLeft: '1rem' }}>
-                    <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>{user?.name}</span>
-                    <button
-                        onClick={handleLogout}
-                        style={{
-                            background: 'transparent',
-                            color: 'white',
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.5rem',
-                            padding: '5px 10px',
-                            borderRadius: '4px',
-                            border: '1px solid rgba(255,255,255,0.2)'
-                        }}
-                    >
-                        <LogOut size={18} />
-                        Quitter
-                    </button>
-                </div>
+                {user && (
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginLeft: '1rem', borderLeft: '1px solid #444', paddingLeft: '1rem' }}>
+                        <span style={{ fontSize: '0.9rem', opacity: 0.8 }}>{user?.name}</span>
+                        <button
+                            onClick={handleLogout}
+                            style={{
+                                background: 'transparent',
+                                color: 'white',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                padding: '5px 10px',
+                                borderRadius: '4px',
+                                border: '1px solid rgba(255,255,255,0.2)'
+                            }}
+                        >
+                            <LogOut size={18} />
+                            Quitter
+                        </button>
+                    </div>
+                )}
             </div>
         </nav>
     );
