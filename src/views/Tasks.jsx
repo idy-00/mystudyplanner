@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { taskService, subjectService } from '../services/api';
-import { Plus, Search, Filter, Trash2, Edit2, CheckCircle2, Circle, Play, Pause } from 'lucide-react';
+import { Plus, Search, Filter, Trash2, Edit2, CheckCircle2, Circle, Play, Pause, AlertTriangle } from 'lucide-react';
 
 const Tasks = () => {
     const [tasks, setTasks] = useState([]);
@@ -11,6 +11,8 @@ const Tasks = () => {
     const [filterPriority, setFilterPriority] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
     const [modalError, setModalError] = useState('');
+    const [isAddingSubject, setIsAddingSubject] = useState(false);
+    const [newSubjectName, setNewSubjectName] = useState('');
 
     // Form and Modal state
     const [showForm, setShowForm] = useState(false);
@@ -142,8 +144,7 @@ const Tasks = () => {
         return matchesSubject && matchesStatus && matchesPriority && matchesSearch;
     });
 
-    const [isAddingSubject, setIsAddingSubject] = useState(false);
-    const [newSubjectName, setNewSubjectName] = useState('');
+
 
     const handleAddSubject = async () => {
         const name = newSubjectName.trim();
