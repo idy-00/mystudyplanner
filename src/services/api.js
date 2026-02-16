@@ -13,6 +13,7 @@ export const taskService = {
 
 export const subjectService = {
     getAll: () => api.get('/subjects'),
+    create: (name) => api.post('/subjects', { name }),
 };
 
 export default api;

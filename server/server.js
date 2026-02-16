@@ -67,6 +67,18 @@ app.get('/api/subjects', (req, res) => {
     res.json(subjects);
 });
 
+app.post('/api/subjects', (req, res) => {
+    const db = readDB();
+    const { name } = req.body;
+    if (name && !db.subjects.includes(name)) {
+        db.subjects.push(name);
+        writeDB(db);
+        res.status(201).json(name);
+    } else {
+        res.status(400).json({ message: 'Subject already exists or name missing' });
+    }
+});
+
 app.listen(PORT, () => {
     console.log(`Server running on http://localhost:${PORT}`);
 });

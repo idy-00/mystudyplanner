@@ -8,7 +8,9 @@ const Tasks = () => {
     const [loading, setLoading] = useState(true);
     const [filterSubject, setFilterSubject] = useState('all');
     const [filterStatus, setFilterStatus] = useState('all');
+    const [filterPriority, setFilterPriority] = useState('all');
     const [searchTerm, setSearchTerm] = useState('');
+    const [modalError, setModalError] = useState('');
 
     // Form and Modal state
     const [showForm, setShowForm] = useState(false);
@@ -91,6 +93,9 @@ const Tasks = () => {
     };
 
     const openForm = (task = null) => {
+        setIsAddingSubject(false);
+        setNewSubjectName('');
+        setModalError('');
         if (task) {
             setEditingTask(task);
             setFormData(task);
@@ -123,10 +128,47 @@ const Tasks = () => {
 
     const filteredTasks = tasks.filter(task => {
         const matchesSubject = filterSubject === 'all' || task.subject === filterSubject;
-        const matchesStatus = filterStatus === 'all' || task.status === filterStatus;
+
+        let matchesStatus = true;
+        if (filterStatus === 'overdue') {
+            matchesStatus = isOverdue(task.dueDate, task.status);
+        } else if (filterStatus !== 'all') {
+            matchesStatus = task.status === filterStatus;
+        }
+
+        const matchesPriority = filterPriority === 'all' || task.priority === filterPriority;
         const matchesSearch = task.title.toLowerCase().includes(searchTerm.toLowerCase());
-        return matchesSubject && matchesStatus && matchesSearch;
+
+        return matchesSubject && matchesStatus && matchesPriority && matchesSearch;
     });
+
+    const [isAddingSubject, setIsAddingSubject] = useState(false);
+    const [newSubjectName, setNewSubjectName] = useState('');
+
+    const handleAddSubject = async () => {
+        const name = newSubjectName.trim();
+        if (!name) return;
+
+        if (subjects.find(s => s.toLowerCase() === name.toLowerCase())) {
+            setFormData({ ...formData, subject: subjects.find(s => s.toLowerCase() === name.toLowerCase()) });
+            setIsAddingSubject(false);
+            setNewSubjectName('');
+            setModalError('');
+            return;
+        }
+
+        try {
+            await subjectService.create(name);
+            setSubjects([...subjects, name]);
+            setFormData({ ...formData, subject: name });
+            setIsAddingSubject(false);
+            setNewSubjectName('');
+            setModalError('');
+        } catch (error) {
+            console.error("Error adding subject", error);
+            setModalError("Erreur lors de l'ajout de la matière");
+        }
+    };
 
     return (
         <div>
@@ -164,6 +206,14 @@ const Tasks = () => {
                         <option value="todo">À faire</option>
                         <option value="in_progress">En cours</option>
                         <option value="done">Terminé</option>
+                        <option value="overdue">En retard</option>
+                    </select>
+
+                    <select value={filterPriority} onChange={(e) => setFilterPriority(e.target.value)} style={{ width: 'auto', margin: 0 }}>
+                        <option value="all">Toutes les priorités</option>
+                        <option value="high">Haute</option>
+                        <option value="medium">Moyenne</option>
+                        <option value="low">Basse</option>
                     </select>
                 </div>
             </div>
@@ -264,6 +314,25 @@ const Tasks = () => {
                 }}>
                     <div className="card" style={{ width: '100%', maxWidth: '500px' }}>
                         <h2 style={{ marginBottom: '1.5rem' }}>{editingTask ? 'Modifier la tâche' : 'Nouvelle Tâche'}</h2>
+
+                        {modalError && (
+                            <div style={{
+                                backgroundColor: '#ffebee',
+                                color: 'var(--danger)',
+                                padding: '12px',
+                                borderRadius: 'var(--border-radius)',
+                                marginBottom: '1.5rem',
+                                fontSize: '0.9rem',
+                                display: 'flex',
+                                alignItems: 'center',
+                                gap: '0.5rem',
+                                border: '1px solid #ffcdd2'
+                            }}>
+                                <AlertTriangle size={18} />
+                                {modalError}
+                            </div>
+                        )}
+
                         <form onSubmit={handleSubmit}>
                             <label>Titre</label>
                             <input
@@ -284,9 +353,52 @@ const Tasks = () => {
                             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
                                 <div>
                                     <label>Matière</label>
-                                    <select value={formData.subject} onChange={(e) => setFormData({ ...formData, subject: e.target.value })}>
-                                        {subjects.map(s => <option key={s} value={s}>{s}</option>)}
-                                    </select>
+                                    {!isAddingSubject ? (
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <select
+                                                value={formData.subject}
+                                                onChange={(e) => setFormData({ ...formData, subject: e.target.value })}
+                                                style={{ marginBottom: 0 }}
+                                            >
+                                                {subjects.map(s => <option key={s} value={s}>{s}</option>)}
+                                            </select>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsAddingSubject(true)}
+                                                className="btn-secondary"
+                                                style={{ padding: '0 10px', fontSize: '1.2rem' }}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    ) : (
+                                        <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                            <input
+                                                type="text"
+                                                placeholder="Nom matière"
+                                                value={newSubjectName}
+                                                onChange={(e) => setNewSubjectName(e.target.value)}
+                                                style={{ marginBottom: 0 }}
+                                                autoFocus
+                                            />
+                                            <button
+                                                type="button"
+                                                onClick={handleAddSubject}
+                                                className="btn-primary"
+                                                style={{ padding: '0 10px' }}
+                                            >
+                                                OK
+                                            </button>
+                                            <button
+                                                type="button"
+                                                onClick={() => setIsAddingSubject(false)}
+                                                className="btn-secondary"
+                                                style={{ padding: '0 10px' }}
+                                            >
+                                                X
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                                 <div>
                                     <label>Priorité</label>
