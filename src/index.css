@@ -323,11 +323,14 @@ input:focus {
 
 /* Auth Pages */
 .auth-container {
-  height: 100vh;
+  min-height: 100vh;
+  margin-top: -70px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-color: var(--bg-primary);
+  width: 100%;
+  padding: 2rem;
 }
 
 .auth-card {
