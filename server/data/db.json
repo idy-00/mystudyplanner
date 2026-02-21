@@ -13,7 +13,7 @@
       "title": "TP Architecture",
       "description": "Rendre le rapport sur les systèmes embarqués",
       "subject": "Architecture",
-      "status": "in_progress",
+      "status": "done",
       "priority": "high",
       "dueDate": "2026-02-20"
     },
@@ -43,6 +43,15 @@
       "dueDate": "2026-02-19",
       "status": "todo",
       "id": 1771258491727
+    },
+    {
+      "title": "DEVOIR DE MATH",
+      "description": "devoir de math ",
+      "subject": "Math",
+      "priority": "low",
+      "dueDate": "2026-04-15",
+      "status": "in_progress",
+      "id": 1771631421149
     }
   ],
   "subjects": [
@@ -52,6 +61,7 @@
     "Base de données",
     "Maths",
     "Physique",
-    "TEC"
+    "TEC",
+    "Math"
   ]
 }

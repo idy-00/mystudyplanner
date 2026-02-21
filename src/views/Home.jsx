@@ -1,9 +1,11 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-import { GraduationCap, ArrowRight, ShieldCheck, Zap, Calendar } from 'lucide-react';
+import { GraduationCap, ArrowRight, ShieldCheck, Zap, Calendar, LayoutDashboard } from 'lucide-react';
+import { useAuth } from '../context/AuthContext';
 
 const Home = () => {
     const navigate = useNavigate();
+    const { user } = useAuth();
 
     return (
         <div className="landing-container">
@@ -66,12 +68,20 @@ const Home = () => {
                             </div>
 
                             <div className="landing-buttons">
-                                <button className="btn-primary" onClick={() => navigate('/login')} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '12px 24px' }}>
-                                    Se connecter <ArrowRight size={18} />
-                                </button>
-                                <button className="btn-secondary" onClick={() => navigate('/register')} style={{ padding: '12px 24px' }}>
-                                    Créer un compte
-                                </button>
+                                {user ? (
+                                    <button className="btn-primary" onClick={() => navigate('/dashboard')} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '12px 24px' }}>
+                                        Aller au Tableau de bord <LayoutDashboard size={18} />
+                                    </button>
+                                ) : (
+                                    <>
+                                        <button className="btn-primary" onClick={() => navigate('/login')} style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', padding: '12px 24px' }}>
+                                            Se connecter <ArrowRight size={18} />
+                                        </button>
+                                        <button className="btn-secondary" onClick={() => navigate('/register')} style={{ padding: '12px 24px' }}>
+                                            Créer un compte
+                                        </button>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
