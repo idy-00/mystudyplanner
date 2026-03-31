@@ -1,16 +1,32 @@
-# React + Vite
+# MyStudyPlanner
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+MyStudyPlanner est une application web moderne recue pour aider les etudiants a organiser leur parcours academique de maniere efficace. Developpee avec React (Vite) pour le frontend et Node.js pour le backend, elle offre une interface intuitive pour la gestion des devoirs, des projets et des matieres.
 
-Currently, two official plugins are available:
+## Fonctionnalites
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Authentification securisee : Systeme de connexion et d'inscription pour proteger vos donnees.
+- - Gestion des Matieres : Ajoutez, modifiez et organisez vos differentes unites d'enseignement.
+  - - Suivi des Devoirs et Projets : Listez vos taches a venir avec des dates d'echeance.
+    - - Alertes de Retard : Visualisez instantanement les devoirs en retard.
+      - - Interface Responsive : Une experience utilisateur fluide sur ordinateur comme sur mobile.
+       
+        - ## Stack Technique
+       
+        - - Frontend : React + Vite
+          - - Backend : Node.js + Express
+            - - Base de donnees : JSON (via db.json)
+             
+              - ## Installation
+             
+              - 1. Cloner le depot :
+                2.    git clone https://github.com/idy-00/mystudyplanner.git
+               
+                3.2. Installer les dependances :
+                   npm install && cd server && npm install && cd ..
 
-## React Compiler
-
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
-
-## Expanding the ESLint configuration
-
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+                3. Lancer l'application :
+                4.    # Backend
+                5.   cd server && node server.js
+                6.      # Frontend
+                7.     npm run dev
+                8. 
